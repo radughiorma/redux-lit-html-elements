@@ -43,73 +43,79 @@ module.exports = {
     },
     module: {
 
-        rules: [{
-            test: /\.ts?$/,
-            loader: 'ts-loader',
-            exclude: [path.resolve(__dirname, 'node_modules')]
-            },{
-            test: /\.js$/,
-            include: [path.resolve(__dirname, 'src')],
-            exclude: [path.resolve(__dirname, 'node_modules')],
-            loader: 'babel-loader',
-            options: {
-                presets: ['env'],
-                plugins: ['syntax-dynamic-import','transform-async-to-generator']
-            }
-/*
-            options: {
-                presets: ['env', {
-                    modules: false
-                }],
-            }
-*/
-        }, {
-            test: /\.css$/,
+        rules: [
+            {
+                test: /\.test.tsx?$/,
+                use: 'mocha-loader',
 
-            use: [{
-                loader: 'style-loader',
-
-                options: {
-                    sourceMap: true
-                }
+                exclude: [path.resolve(__dirname, 'node_modules')]
             }, {
-                loader: 'css-loader'
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
+                exclude: [path.resolve(__dirname, 'node_modules')]
+            }, {
+                test: /\.js$/,
+                include: [path.resolve(__dirname, 'src')],
+                exclude: [path.resolve(__dirname, 'node_modules')],
+                loader: 'babel-loader',
+                options: {
+                    presets: ['env'],
+                    plugins: ['syntax-dynamic-import', 'transform-async-to-generator']
+                }
+                /*
+                            options: {
+                                presets: ['env', {
+                                    modules: false
+                                }],
+                            }
+                */
+            }, {
+                test: /\.css$/,
+
+                use: [{
+                    loader: 'style-loader',
+
+                    options: {
+                        sourceMap: true
+                    }
+                }, {
+                    loader: 'css-loader'
+                }]
             }]
-        }]
     },
 
     resolve: {
-        extensions: [ '.tsx', '.ts', '.js' ]
+        extensions: ['.ts', '.js', '.tsx', '.jsx']
     },
     plugins: [
-        new CleanWebpackPlugin(['dist']),
+        // new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
             title: 'Fancy Redux ToDo App'
         })
     ],
     output: {
-        // filename: '[name].[chunkhash].js',
-        filename: '[name].bundle.js',
+        filename: '[name].[chunkhash].js',
+        // filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/'
     }
 
 
-/*
-    optimization: {
-        splitChunks: {
-            chunks: 'async',
-            minSize: 30000,
-            minChunks: 1,
-            name: true,
+    /*
+        optimization: {
+            splitChunks: {
+                chunks: 'async',
+                minSize: 30000,
+                minChunks: 1,
+                name: true,
 
-            cacheGroups: {
-                vendors: {
-                    test: /[\\/]node_modules[\\/]/,
-                    priority: -10
+                cacheGroups: {
+                    vendors: {
+                        test: /[\\/]node_modules[\\/]/,
+                        priority: -10
+                    }
                 }
             }
         }
-    }
-*/
+    */
 }
