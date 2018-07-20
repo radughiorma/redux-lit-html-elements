@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-
+const autoprefixer = require('autoprefixer');
 
 /*
  * SplitChunksPlugin is enabled by default and replaced
@@ -31,9 +31,11 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
     mode: 'development',
     entry: {
+        // testmdc: './src/testmdc.ts',
         demo: './src/demo/demo.ts',
+        app: './src/scss/app.scss',
         todoitem: './src/todo-item/todo-item.ts',
-        todolist: './src/todo-list/todo-list.ts'
+        //todolist: './src/todo-list/todo-list.ts'
     },
     devtool: 'inline-source-map',
     devServer: {
@@ -73,28 +75,109 @@ module.exports = {
                 test: /\.css$/,
 
                 use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: 'css/[name].css',
+                    }
+                },{
                     loader: 'style-loader',
 
                     options: {
                         sourceMap: true
                     }
                 }, {
-                    loader: 'css-loader'
+                    loader: 'css-loader',
+
+                    options: {
+                        sourceMap: true
+                    }
+
+                }]
+            }, {
+                rules: [{
+                    test: /\.scss$/,
+                    use: [
+                        {
+                            loader: 'style-loader/url',
+
+                            options: {
+                                sourceMap: true
+                            }
+                        },
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                name: 'css/[name].css'
+                            }
+                        },
+                        { loader: 'extract-loader' },
+                        { loader: 'css-loader' },
+                      /*  { loader: 'postcss-loader',
+                            options: {
+                                plugins: () => [autoprefixer()]
+                            }
+                        },*/
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                includePaths: ['./node_modules']
+                            }
+                        },
+                    ]
                 }]
             }]
     },
 
     resolve: {
-        extensions: ['.ts', '.js', '.tsx', '.jsx']
+        extensions: ['.ts', '.js', '.tsx', '.jsx', '.html','.css,', '.scss']
     },
     plugins: [
         // new CleanWebpackPlugin(['dist']),
+   /*     new HtmlWebpackPlugin({
+            title: 'Fancy Redux ToDo App',
+            files: {
+                css: ['./dist/css/app.css'],
+                js: ['testmdc.js'],
+                chunks: {
+                    head: {
+                        css: ['./dist/css/app.css']
+                    }
+                }
+
+            }
+
+        }),*/
         new HtmlWebpackPlugin({
-            title: 'Fancy Redux ToDo App'
+            filename: 'testmdc.html',
+            template: './src/testmdc.html',
+            files: {
+                css: ['./dist/css/app.css'],
+                js: ['testmdc.js'],
+                chunks: {
+                    head: {
+                        css: ['./dist/css/app.css']
+                    }
+                }
+
+            }
+
+
+        }),
+        new HtmlWebpackPlugin({
+            title:'Redux Lit Html Elements',
+            filename: 'demo.html',
+            template: './src/demo/demo.html',
+            assets: {
+                style: 'app.css'
+            },
+            publicPath: '/demo',
+
+
+
         })
     ],
     output: {
-        filename: '[name].[chunkhash].js',
+        filename: 'js/[name].[chunkhash].js',
         // filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/'
