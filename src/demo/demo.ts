@@ -24,6 +24,7 @@ ${style}
 <header>Redux Lit Html Elements</header>
 <p>Demo</p>
 <h2>Todo Item Demo</h2>
+<add-todo></add-todo>
 <div style="width: available">
 <div class="my-flex">
 <todo-item mytitle="title_1"></todo-item>

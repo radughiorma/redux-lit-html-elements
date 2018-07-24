@@ -1,6 +1,12 @@
 @import '~material-components-web/material-components-web';
 @import '~@material/card/mdc-card';
 $thickness: 0.2em;
+:root {
+  --mdc-theme-primary: #ffc107;
+  --mdc-theme-secondary: #009688;
+  --mdc-theme-background: #ffffff;
+}
+
 .mdc-card {
   //@include mdc-card-fill-color( #c79100);
   @include mdc-card-outline(#ffc107, $thickness);

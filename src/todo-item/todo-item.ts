@@ -3,13 +3,14 @@ import {html, render, TemplateResult} from 'lit-html';
 let TITLE = 'mytitle';
 let SUBTITLE = 'subtitle';
 let TEXT = 'text';
+
 interface ITodoItem {
-    mytitle: string | undefined;
-    subtitle: string | undefined;
-    text: string | undefined;
+    mytitle: string;
+    subtitle: string;
+    text: string ;
     _shadowRoot: ShadowRoot;
     imgUrl: any;
-    [key: string] : any;
+
 
     connectedCallback(): void;
 
@@ -29,33 +30,68 @@ class TodoItem extends HTMLElement implements ITodoItem {
     // subhead: string;
     // title: string;
     // subtitle: string
-    mytitle: string | undefined;
-    subtitle: string | undefined;
-    text: string | undefined;
+    // mytitle: string | undefined;
     imgUrl: any;
-    [key: string]: any;
 
-   static _imgUrl() {return fetch("https://picsum.photos/g/200/300/?random").then(response => response['url'])}
+    static _imgUrl() {
+        return fetch("https://picsum.photos/g/200/300/?random").then(response => response['url'])
+    }
+
     constructor() {
         super();
+        console.log('Custom TodoItem element constructor');
         this._shadowRoot = this.attachShadow({mode: "closed"});
         this.imgUrl = TodoItem._imgUrl();
-        console.log(this, this.getAttribute('mytitle'), this[SUBTITLE], this[TEXT]);
-        [TITLE, SUBTITLE, TEXT].forEach((a) => this[a] = this.hasAttribute(a) ? this.getAttribute(a): undefined);
+        // [TITLE, SUBTITLE, TEXT].forEach((a) => this[a] = this.hasAttribute(a) ? this.getAttribute(a) : undefined);
+    }
+
+    static get observedAttributes() {
+        return [TITLE, SUBTITLE, TEXT];
+    }
+
+    get mytitle(): string {
+        return this.__get(TITLE);
+    }
+
+    get subtitle(): string {
+        return this.__get(SUBTITLE);
+    }
+
+    get text(): string {
+        return this.__get(TEXT);
+    }
+
+    set mytitle(val: string) {
+        this.__set(TITLE, val);
+    }
+
+    set subtitle(val: string) {
+        this.__set(SUBTITLE, val);
+    }
+
+    set text(val: string) {
+        this.__set(TEXT, val);
+    }
+
+    private __get(attr: string): any {
+        return this.hasAttribute(attr) ? this.getAttribute(attr) : undefined;
+    }
+
+    private __set(attr: string, val: string | null | undefined) {
+        if (val) {
+            this.setAttribute(attr, val);
+        } else {
+            this.removeAttribute(attr);
+        }
     }
 
     connectedCallback() {
         this.textContent = 'I am a custom element.';
-        console.log(this, (this)['mytitle'], this[SUBTITLE], this[TEXT]);
-        console.log(this, this.getAttribute('mytitle'), this[SUBTITLE], this[TEXT]);
         this.render();
     }
-
     attributeChangedCallback(name: string, oldValue: any, newValue: any) {
         console.log('Custom TodoItem element attributes changed.', name, oldValue, newValue);
 
-        console.log(this, (this)['mytitle'], this[SUBTITLE], this[TEXT]);
-        // console.log('Custom TodoItem element attributes changed.');
     }
 
     disconnectedCallback() {
@@ -71,7 +107,7 @@ class TodoItem extends HTMLElement implements ITodoItem {
     }
 
     template() {
-        let imgUrl = () => fetch("https://picsum.photos/g/200/300/?random").then(response => response['url']);
+        // let imgUrl = () => fetch("https://picsum.photos/g/200/300/?random").then(response => response['url']);
         let myStyle = html`
 
       <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
@@ -101,9 +137,9 @@ ${myStyle}
         </div>
    
         <div class="mdc-typography">
-            <div class="mdc-card__title mdc-typography--headline6">${this[TITLE]}</div>
-            <div class="mdc-card__subtitle">${this[SUBTITLE]}</div>
-            <div class="mdc-card__supporting-text">${this[TEXT]}</div>
+            <div class="mdc-card__title mdc-typography--headline6">${this.mytitle}</div>
+            <div class="mdc-card__subtitle">${this.subtitle}</div>
+            <div class="mdc-card__supporting-text">${this.text}</div>
         </div>
     </div>
     

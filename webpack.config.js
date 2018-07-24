@@ -3,6 +3,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const autoprefixer = require('autoprefixer');
+const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 
 /*
  * SplitChunksPlugin is enabled by default and replaced
@@ -35,6 +36,7 @@ module.exports = {
         demo: './src/demo/demo.ts',
         app: './src/scss/app.scss',
         todoitem: './src/todo-item/todo-item.ts',
+        addtodo: './src/add-todo-item/add-todo-item.ts',
         //todolist: './src/todo-list/todo-list.ts'
     },
     devtool: 'inline-source-map',
@@ -174,6 +176,11 @@ module.exports = {
 
 
 
+        }),
+        new TypedocWebpackPlugin({
+            out : './dist/docs',
+            tsconfig: './tsconfig.json',
+            include: './src'
         })
     ],
     output: {
