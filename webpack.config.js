@@ -177,11 +177,9 @@ module.exports = {
 
 
         }),
-        new TypedocWebpackPlugin({
-            out : './dist/docs',
-            tsconfig: './tsconfig.json',
-            include: './src'
-        })
+   /*     new TypedocWebpackPlugin({
+            out : './docs',
+        }, './src')*/
     ],
     output: {
         filename: 'js/[name].[chunkhash].js',

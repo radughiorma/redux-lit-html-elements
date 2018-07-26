@@ -91,6 +91,7 @@ class TodoItem extends HTMLElement implements ITodoItem {
     }
     attributeChangedCallback(name: string, oldValue: any, newValue: any) {
         console.log('Custom TodoItem element attributes changed.', name, oldValue, newValue);
+        this.render();
 
     }
 

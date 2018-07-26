@@ -12,8 +12,8 @@ export let setDescription = (index: number | string, any: any) => {
     return {type: SET_TODO_DESCIPTION, index: index, any: any}
 }
 
-export let addTodo = () => {
-    return {type: ADD_TODO}
+export let addTodo = (title: string, subtitle: string, description : any) => {
+    return {type: ADD_TODO, title: title, subtitle: subtitle, description: description}
 }
 export let deleteTodo = (index: number | string) => {
     return {type: DELETE_TODO, index}

@@ -1,19 +1,21 @@
 import {ADD_TODO, EDIT_TOOD, DELETE_TODO, SET_TOOD_TITLE, SET_TODO_DESCIPTION} from "./actions";
 
-export interface TodoState {
+export interface ITodoState {
     title : string,
+    subtitle : string,
     description : string,
     completed : boolean
 }
 
-export function reducers(state: TodoState[] = [] , action: any) {
+export function reducers(state: ITodoState[] = [] , action: any) {
     switch (action.type) {
         case ADD_TODO:
             return [
                 ...state,
                 {
-                    title: 'Default value',
-                    description: 'Default description',
+                    title: action.title,
+                    subtitle: action.subtitle,
+                    description: action.description,
                     completed: false
                 }
             ];
@@ -25,6 +27,7 @@ export function reducers(state: TodoState[] = [] , action: any) {
                     return Object.assign({}, todo,
                         {
                             title: action.title,
+                            subtitle: action.subtitle,
                             description: action.description,
                             completed: todo.completed
                         })
@@ -37,6 +40,7 @@ export function reducers(state: TodoState[] = [] , action: any) {
                     return Object.assign({}, todo,
                         {
                             title : action.title,
+                            subtitle: action.subtitle,
                             description: todo.description,
                             completed : todo.completed
                         })

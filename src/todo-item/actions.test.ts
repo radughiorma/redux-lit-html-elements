@@ -19,7 +19,7 @@ describe('todo-item', () =>
     describe('actions', () => {
 
         it('addTodo() must return the action type', () => {
-            const result = addTodo();
+            const result = addTodo('title','subtitle','description');
             expect (result.type).to.equal(ADD_TODO);
         });
         describe('setTitle()', ()=>{
