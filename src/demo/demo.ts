@@ -18,7 +18,7 @@ let style = html`
 `
 
 let todo = (id:string | number, title: string, subtitle:string, description: string) => html`
-<todo-item id="${id}" mytitle="${title}" subtitle="${subtitle}" text="${description}"></todo-item>-
+<todo-item id="${id}" mytitle="${title}" subtitle="${subtitle}" text="${description}"></todo-item>
 `
 let todoList = () => {
     let todos = app.getState().todoItemReducers;
