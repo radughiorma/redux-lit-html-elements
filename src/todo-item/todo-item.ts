@@ -1,13 +1,20 @@
-import {html, render, TemplateResult} from 'lit-html';
+import {html, render} from 'lit-html/lib/lit-extended';
+import {TemplateResult} from "lit-html";
+
+import app, {printCurrentState, storeStateChangedEvent} from '../app/app';
+import {deleteTodo, toggleTodo} from "./actions";
+import {Store} from "redux";
 
 let TITLE = 'mytitle';
 let SUBTITLE = 'subtitle';
 let TEXT = 'text';
+let INDEX = 'index';
 
 interface ITodoItem {
     mytitle: string;
     subtitle: string;
     text: string ;
+    index: string;
     _shadowRoot: ShadowRoot;
     imgUrl: any;
 
@@ -32,6 +39,7 @@ class TodoItem extends HTMLElement implements ITodoItem {
     // subtitle: string
     // mytitle: string | undefined;
     imgUrl: any;
+    private store: Store<any> & { dispatch: any };
 
     static _imgUrl() {
         return fetch("https://picsum.photos/g/200/300/?random").then(response => response['url'])
@@ -42,11 +50,16 @@ class TodoItem extends HTMLElement implements ITodoItem {
         console.log('Custom TodoItem element constructor');
         this._shadowRoot = this.attachShadow({mode: "closed"});
         this.imgUrl = TodoItem._imgUrl();
+        this.store = app;
         // [TITLE, SUBTITLE, TEXT].forEach((a) => this[a] = this.hasAttribute(a) ? this.getAttribute(a) : undefined);
     }
 
     static get observedAttributes() {
-        return [TITLE, SUBTITLE, TEXT];
+        return [TITLE, SUBTITLE, TEXT, INDEX, 'store'];
+    }
+
+    get index(): string {
+        return this.__get(INDEX);
     }
 
     get mytitle(): string {
@@ -59,6 +72,10 @@ class TodoItem extends HTMLElement implements ITodoItem {
 
     get text(): string {
         return this.__get(TEXT);
+    }
+
+    set index(val: string){
+        this.__set(INDEX, val);
     }
 
     set mytitle(val: string) {
@@ -118,7 +135,7 @@ class TodoItem extends HTMLElement implements ITodoItem {
 <link rel="stylesheet" type="text/css" href="css/app.css">
     <style>
     .my-card {
-  height: 350px;
+  /*height: 350px;*/
   width: 350px;
 }
 .my-card__media {
@@ -146,7 +163,8 @@ ${myStyle}
     
     <div class="mdc-card__actions">
     <div class="mdc-card__action-buttons">
-      <button class="mdc-button mdc-card__action mdc-card__action--button">Done</button>
+      <button class="mdc-button mdc-card__action mdc-card__action--button" on-click=${(e: CustomEvent)=>this.__doneEvent(e)}>Done</button>
+      <button class="mdc-button mdc-card__action mdc-card__action--button" on-click=${(e: CustomEvent)=>this.__deleteEvent(e)}>Delete</button>
     </div>
         <div class="mdc-card__action-icons">
       <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon" title="Favorite">favorite_border</button>
@@ -157,6 +175,13 @@ ${myStyle}
 </div>
 
 `;
+    }
+
+    private __doneEvent(e: CustomEvent){
+        this.dispatchEvent(storeStateChangedEvent(toggleTodo(this.index)));
+    }
+    private __deleteEvent(e: CustomEvent){
+        this.dispatchEvent(storeStateChangedEvent(deleteTodo(this.index)));
     }
 
 }

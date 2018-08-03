@@ -1,4 +1,4 @@
-import {ADD_TODO, EDIT_TOOD, DELETE_TODO, SET_TOOD_TITLE, SET_TODO_DESCIPTION} from "./actions";
+import {ADD_TODO, EDIT_TOOD, DELETE_TODO, SET_TOOD_TITLE, SET_TODO_DESCIPTION, TOGGLE_TODO} from "./actions";
 
 export interface ITodoState {
     title : string,
@@ -7,7 +7,7 @@ export interface ITodoState {
     completed : boolean
 }
 
-export function reducers(state: ITodoState[] = [] , action: any) {
+export function reducers(state: ITodoState[] = [] , action: any):ITodoState[]  {
     switch (action.type) {
         case ADD_TODO:
             return [
@@ -20,7 +20,8 @@ export function reducers(state: ITodoState[] = [] , action: any) {
                 }
             ];
         case DELETE_TODO:
-            return state.splice(action.index, 1);
+            state.splice(action.index, 1);
+            return state;
         case EDIT_TOOD:
             return state.map((todo, index) => {
                 if (index === action.index) {
@@ -56,6 +57,13 @@ export function reducers(state: ITodoState[] = [] , action: any) {
                             description: action.description,
                             completed : todo.completed
                         })
+                }
+                return todo;
+            });
+        case TOGGLE_TODO:
+            return state.map((todo, index)=> {
+                if(index == action.index){
+                    return Object.assign({}, todo,{completed: !todo.completed})
                 }
                 return todo;
             });

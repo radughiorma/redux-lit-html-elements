@@ -14,19 +14,9 @@ class AddTodoItem extends HTMLElement {
         this._shadowRoot = this.attachShadow({mode: 'closed'});
     }
     static get observedAttributes() {
-        return [TITLE, SUBTITLE, TEXT, 'store'];
+        return [TITLE, SUBTITLE, TEXT];
     }
 
-    get store(): any {
-        return this.__get('store');
-    }
-    set store(store: any){
-        if (store) {
-            this.setAttribute('store', store);
-        } else {
-            this.removeAttribute('store');
-        }
-    }
     get mytitle(): string {
         return this.__get(TITLE);
     }
@@ -119,12 +109,11 @@ ${mystyle}
     </div>`
     }
     private onChangeHandler(e: CustomEvent, p: string, v: any){
-        this.store.dispatch(setProperty(p, v));
+        this.dispatchEvent(storeStateChangedEvent(setProperty(p, v)));
     }
 
     private onClickHandler(e: CustomEvent) {
-        this.store.dispatch(addTodo(this.mytitle, this.subtitle, this.text));
-        this.dispatchEvent(storeStateChangedEvent());
+        this.dispatchEvent(storeStateChangedEvent(addTodo(this.mytitle, this.subtitle, this.text)));
     }
 }
 

@@ -1,5 +1,6 @@
 import {createStore, applyMiddleware, Middleware} from 'redux';
-import reducers from "./reducers"
+import reducers, {VisibilityFilters} from "./reducers"
+import {ITodoState} from "../todo-item/reducers";
 
 const __logger: Middleware = (store: any) => (next: any) => (action: any) => {
     console.log('dispatching', action);
@@ -32,16 +33,33 @@ const __loadState = () => {
     }
 }
 
+export const getVisibleTodos = (todos: ITodoState[], filter: string) => {
+    switch (filter) {
+        case VisibilityFilters.SHOW_ALL:
+            return todos
+        case VisibilityFilters.SHOW_COMPLETED:
+            return todos.filter(t => t.completed)
+        case VisibilityFilters.SHOW_ACTIVE:
+            return todos.filter(t => !t.completed)
+        default:
+            throw new Error('Unknown filter: ' + filter)
+    }
+};
+
+
 const app = createStore(reducers, __loadState(), applyMiddleware(__logger, __saveState));
 
 export const printCurrentState = (msg:string = 'current state') => {
     console.log(msg, app.getState())
 };
 
-export const storeStateChangedEvent = () => {
-    event = new CustomEvent('storestatechanged');
-    event.initEvent('storestatechanged',true, true);
-
+export const storeStateChangedEvent = (action = {}) => {
+    event = new CustomEvent('storestatechanged',
+        {
+            detail: action,
+            bubbles: true,
+            cancelable: true
+        });
     return event;
 };
 

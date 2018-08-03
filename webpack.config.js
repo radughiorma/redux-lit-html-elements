@@ -37,6 +37,7 @@ module.exports = {
         app: './src/scss/app.scss',
         todoitem: './src/todo-item/todo-item.ts',
         addtodo: './src/add-todo-item/add-todo-item.ts',
+        menu: './src/menu/menu.ts',
         //todolist: './src/todo-list/todo-list.ts'
     },
     devtool: 'inline-source-map',
