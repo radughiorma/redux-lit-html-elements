@@ -75,7 +75,7 @@
     "@material/fab": "^0.37.0",
     "@types/material-components-web": "^0.35.0",
     "lit-html": "^0.10.2",
-    "material-components-web": "^0.37.1",
+    "material-components-web": "^0.38.2",
     "material-icons": "^0.2.3",
     "redux": "^4.0.0"
   }
