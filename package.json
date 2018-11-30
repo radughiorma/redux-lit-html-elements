@@ -74,7 +74,7 @@
     "@material/ripple": "^0.37.0",
     "@material/fab": "^0.37.0",
     "@types/material-components-web": "^0.35.0",
-    "lit-html": "^0.10.2",
+    "lit-html": "^0.14.0",
     "material-components-web": "^0.37.1",
     "material-icons": "^0.2.3",
     "redux": "^4.0.0"
