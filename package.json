@@ -22,7 +22,7 @@
   "author": "Radu Ghiorma",
   "license": "MIT",
   "devDependencies": {
-    "@types/chai": "^4.1.4",
+    "@types/chai": "4.2.9",
     "@types/chai-arrays": "^1.0.2",
     "@types/mocha": "^5.2.4",
     "@webpack-cli/init": "^0.1.0",
